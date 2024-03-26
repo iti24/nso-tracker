@@ -4,6 +4,8 @@ const cors = require("cors");
 const config = require("./config");
 const bodyParser = require("body-parser");
 const locationRoutes = require("./routes/locatinDetails");
+const usersRoutes = require("./routes/users");
+
 const app = express();
 
 mongoose.connect(config.mongodbUri, {
@@ -21,6 +23,8 @@ app.get("/", async (req, res) => {
 // Routes
 
 app.use("/api/location", locationRoutes);
+app.use("/api/users", usersRoutes);
+
 
 
 
