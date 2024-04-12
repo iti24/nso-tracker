@@ -2,6 +2,10 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 const locationSchema = new Schema({
+    createdBy: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref:"Users"
+      },
     locationDetails: {
         location: String,
         address: String, 
@@ -17,7 +21,7 @@ const locationSchema = new Schema({
         electricitySupply: Boolean
     },
     deliveryRisks: String
-});
+},{ timestamps: true });
 
 const Location = mongoose.model('Location', locationSchema);
 
