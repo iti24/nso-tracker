@@ -17,10 +17,10 @@ const locationSchema = new Schema({
     },
     timings: String,
     operationalParameters: {
-        waterConnection: Boolean,
-        electricitySupply: Boolean
+        waterConnection: String,
+        electricitySupply: String
     },
-    deliveryRisks: String
+    deliveryRiders: String
 },{ timestamps: true });
 
 const Location = mongoose.model('Location', locationSchema);
