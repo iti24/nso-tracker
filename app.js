@@ -1,83 +1,32 @@
-// 
-const express = require("express");
-const mongoose = require("mongoose");
-const cors = require("cors");
-const config = require("./config");
-const bodyParser = require("body-parser");
-const locationRoutes = require("./routes/locatinDetails");
-const proposedLocationRoutes = require("./routes/proposedLocation");
-const brandSaleRoutes = require("./routes/brandSalesAnalysis");
-const outletSaleRoutes= require("./routes/outletSalesAnalysis");
-const commercialRoutes= require("./routes/commercials");
-const departmentRecommendationRoutes= require("./routes/departmentRecommendation");
-const finalRecommendationRoutes= require("./routes/finalRecommendation");
-const profitLossProjectionRoutes = require("./routes/profitLossProjection");
-const interviewToolkitRoutes = require("./routes/interviewToolkit");
-const interviewChecklistRoutes = require("./routes/interviewChecklist");
-const backgroundCheckRoutes=require("./routes/backgroundCheck");
-const interviewquestionresponseRoutes=require("./routes/interviewquestionResponse");
-const evaluationAndHiringProcessRoutes =require("./routes/evaluationAndHiringProcess");
-const salaryAndNoticeDetailsRoutes=require("./routes/salaryAndNoticeDetails");
-const usersRoute = require("./routes/users");
-const adminsRoute = require("./routes/admin");
-
-
-
-
-
-
-
-
+const express = require('express');
+const mongoose = require('mongoose');
+const PasswordChecker = require('./passwordChecker');
 
 const app = express();
 
-
-mongoose.connect(config.mongodbUri, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
+// MongoDB connection setup
+mongoose.connect('mongodb+srv://itishreepanda:princeprincy@cluster0.ksqyakn.mongodb.net/', {
+    useNewUrlParser: true,
+    useUnifiedTopology: true
 });
 const db = mongoose.connection;
-db.on("error", console.error.bind(console, "mongoDB connection error"));
-app.use(cors());
-
-app.use(bodyParser.json());
-app.get("/", async (req, res) => {
-  res.send("the server is running");
+db.once('open', () => {
+    console.log('Connected to MongoDB');
 });
+
+// Middleware
+app.use(express.json());
+
 // Routes
+app.post('/check-password', (req, res) => {
+    const password = req.body.password;
+    const passwordChecker = new PasswordChecker();
+    const { valid, message } = passwordChecker.checkPassword(password);
+    res.json({ valid, message });
+});
 
-app.use("/api/locations", locationRoutes);
-app.use("/api/proposed-locations",proposedLocationRoutes );
-app.use("/api/brand-sales",brandSaleRoutes );
-app.use("/api/outletsales",outletSaleRoutes );
-app.use("/api/commercials",commercialRoutes );
-app.use("/api/departmentrecommendation",departmentRecommendationRoutes );
-app.use("/api/finalrecommendation",finalRecommendationRoutes );
-app.use("/api/profitlossprojection",profitLossProjectionRoutes );
-app.use("/api/interviewtoolkit",interviewToolkitRoutes );
-app.use("/api/interviewchecklist",interviewChecklistRoutes );
-app.use("/api/backgroundcheck",backgroundCheckRoutes );
-app.use("/api/interviewquestionresponse",interviewquestionresponseRoutes );
-app.use("/api/evaluationandhiringprocess",evaluationAndHiringProcessRoutes );
-app.use("/api/salaryandnoticedetails",salaryAndNoticeDetailsRoutes );
-app.use("/api/users", usersRoute);
-app.use("/api/admins", adminsRoute);
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-app.listen(config.port, () => {
-  console.log(`Server started on port ${config.port}`);
+// Start the server
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => {
+    console.log(`Server is running on port ${PORT}`);
 });
