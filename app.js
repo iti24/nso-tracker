@@ -5,7 +5,7 @@ const PasswordChecker = require('./passwordChecker');
 const app = express();
 
 // MongoDB connection setup
-mongoose.connect('mongodb+srv://itishreepanda:princeprincy@cluster0.ksqyakn.mongodb.net/', {
+mongoose.connect('mongodb_UrI', {
     useNewUrlParser: true,
     useUnifiedTopology: true
 });
